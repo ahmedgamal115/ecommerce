@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Install the application dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Define the entry point for the container
 CMD ["npm", "start"]
