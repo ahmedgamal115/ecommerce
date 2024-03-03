@@ -43,7 +43,7 @@ module.exports = {
                 // Delete old image from files images
                 for (let index = 0; index < args.oldImage.length; index++) {
                    if(fs.existsSync(`./${args.oldImage[index]}`)){
-                       fs.unlinkSync(`./${args.oldImage[index]}`)
+                       await fs.unlinkSync(`./${args.oldImage[index]}`)
                    }
                 }
                 // Upload new image
