@@ -5,6 +5,9 @@ module.exports = gql`
     scalar Upload
 
     type Query{
+        colors: [Colors!]!
+        color( id:ID! ): Colors!
+
         productsFeed: [Product!]!
         product( id: ID! ): Product!
         productType( gender: String! ): [Product!]!
@@ -16,13 +19,21 @@ module.exports = gql`
 
         OrdersFeed:  [Orders!]!
     }
+    type Colors{
+        id: ID!
+        color: String!
+        colorName: String!
+        createdAt: DateTime!
+        updatedAt: DateTime!
+    }
     type Product{
         id: ID!
         image: [String!]!
         status: String!
         gender: String!
-        color: String!
+        color: Colors!
         price: Float!
+        amounts: Float!
         createdAt: DateTime!
         updatedAt: DateTime!
     }
@@ -54,9 +65,12 @@ module.exports = gql`
         updatedAt: DateTime!
     }
     type Mutation{
-        addProduct( image: [Upload!]!, status: String!, gender: String!, color: String!, price: Float! ): Product!
+        addColors( color: String!,colorName: String! ): Colors!
+        deleteColors( id:ID! ): String!
+
+        addProduct( image: [Upload!]!, status: String!, gender: String!, color: ID!, price: Float!, amounts: Float!): Product!
         deleteProduct( id: ID! ): String!
-        updateProduct( id: ID!, image: [Upload!],oldImage: [String!], status: String, gender: String, color: String, price: Float ): Product!
+        updateProduct( id: ID!, image: [Upload!],oldImage: [String!], status: String, gender: String, color: ID, price: Float, amounts: Float ): Product!
 
         addPromoCode(code: String!,discount: Float!,expire: String!): PromoCodes!
         deletePromoCode( id: ID! ): String!

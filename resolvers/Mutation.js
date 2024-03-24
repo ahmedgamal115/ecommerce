@@ -34,6 +34,21 @@ const addnewImage = async(images,color)=>{
 }
 
 module.exports = {
+    addColors: async(parent, args, {Models})=>{
+        let newColor = new Models.Colors({
+            color: args.color,
+            colorName: args.colorName
+        })
+        return await newColor.save()
+    },
+    deleteColors: async(parent, args, {Models})=>{
+        if(await Models.Colors.findById(args.id)){
+            await Models.Colors.findByIdAndDelete(args.id)
+            return "Color Deleted"
+        }else{
+            return "color not a vaild"
+        }
+    },
     addProduct: async(parent, args, {Models})=>{
         const colorName = GetColorName(args.color)
         return addnewImage(args.image,colorName).then(async(imageData)=>{
@@ -42,7 +57,8 @@ module.exports = {
                 status: args.status,
                 gender: args.gender,
                 color: args.color,
-                price: args.price
+                price: args.price,
+                amounts: args.amounts
             })
             return await newProduct.save()
         })
@@ -71,7 +87,8 @@ module.exports = {
                         status: args.status,
                         gender: args.gender,
                         color: args.color,
-                        price: args.price}},{new:true})
+                        price: args.price,
+                        amounts: args.amounts}},{new:true})
                 })
             }else{
                 return await Models.products.findOneAndUpdate( {_id:args.id},{$set:{

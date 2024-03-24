@@ -3,24 +3,29 @@ const { default: mongoose, Schema } = require("mongoose");
 const productsSchema = new Schema({
     image: {
         type: [String],
-        require: true
+        required: true
     },
     status: {
         type: String,
-        require: true
+        required: true
     },
     gender: {
         type: String,
-        require: true
+        required: true
     },
     color: {
-        type: String,
-        require: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Colors',
+        required: true
     },
     price: {
         type: Number,
-        require: true
+        required: true
     },
+    amounts:{
+        type: Number,
+        required: true
+    }
 },{timestamps:true})
 
 const Products = mongoose.model.Products || mongoose.model('Products',productsSchema)

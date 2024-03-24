@@ -1,4 +1,10 @@
 module.exports = {
+    colors: async(parent, args, {Models})=>{
+        return await Models.Colors.find({})
+    },
+    color: async(parent, args, {Models})=>{
+        return await Models.Colors.findById(args.id)
+    },
     productsFeed: async(parent, args, {Models})=> {
         return await Models.products.find({})
     },
