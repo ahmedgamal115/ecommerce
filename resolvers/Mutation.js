@@ -12,12 +12,12 @@ const deleteOldImage = async(images)=>{
         await bucket.file(path).delete()
     }
 }
-const addnewImage = async(images,color)=>{
+const addnewImage = async(images,color,gender)=>{
     let imagesPath = []
     for (let index = 0; index < images.length; index++) {
         const { createReadStream, filename, encoding, mimetype } = await images[index]
         const stream = createReadStream();
-        const fileUpload = bucket.file(`${color}_${index}_${Date.now()}_${path.extname(filename)}`);
+        const fileUpload = bucket.file(`${color}_${gender}_${index}_${Date.now()}_${path.extname(filename)}`);
         const uploadStream = fileUpload.createWriteStream({
             metadata: {
                 contentType: mimetype
@@ -50,8 +50,8 @@ module.exports = {
         }
     },
     addProduct: async(parent, args, {Models})=>{
-        const colorName = GetColorName(args.color)
-        return addnewImage(args.image,colorName).then(async(imageData)=>{
+        let {colorName} = await Models.Colors.findById(args.color)
+        return addnewImage(args.image,colorName,args.gender).then(async(imageData)=>{
             let newProduct = Models.products({
                 image: imageData,
                 status: args.status,
