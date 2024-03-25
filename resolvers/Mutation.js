@@ -78,8 +78,8 @@ module.exports = {
     updateProduct: async(parent, args, {Models})=>{
         try {
             if(args.image){
-                const colorName = GetColorName(args.color)
-                return addnewImage(args.image,colorName).then(async(imageData)=>{
+                let {colorName} = await Models.Colors.findById(args.color)
+                return addnewImage(args.image,colorName,args.gender).then(async(imageData)=>{
                     deleteOldImage(args.oldImage)
                     // set new data in db
                     return await Models.products.findOneAndUpdate( {_id:args.id},{$set:{
