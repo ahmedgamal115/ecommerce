@@ -8,8 +8,10 @@ const deleteOldImage = async(images)=>{
     for (let index = 0; index < images.length; index++) {
         let url = images[index]
         let path = url.split(`${bucket.name}/`)[1].split('?')[0].replace("%20"," ").replace("%28","(").replace("%29",")");
-        console.log(path)
-        await bucket.file(path).delete()
+        let checkImage = await bucket.file(path).exists()
+        if(checkImage[0]){
+            await bucket.file(path).delete()
+        }
     }
 }
 const addnewImage = async(images,color,gender)=>{
