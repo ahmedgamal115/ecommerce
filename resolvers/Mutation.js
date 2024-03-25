@@ -96,7 +96,8 @@ module.exports = {
                     status: args.status,
                     gender: args.gender,
                     color: args.color,
-                    price: args.price}},{new:true})
+                    price: args.price,
+                    amounts: args.amounts}},{new:true})
             }
         } catch (error) {
             console.error(error)
