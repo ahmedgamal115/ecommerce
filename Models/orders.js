@@ -3,11 +3,11 @@ const { default: mongoose, Schema } = require("mongoose");
 const ordersSchema = new Schema({
     username: {
         type: String,
-        require: true
+        required: true
     },
     email: {
         type: String,
-        require: true,
+        required: true,
     },
     phone: {
         type: String,
@@ -18,22 +18,22 @@ const ordersSchema = new Schema({
     },
     address: {
         type: String,
-        require: true
+        required: true
     },
     size: {
         type: [String],
-        require: true
+        required: true
     },
     amount: {
         type: [Number],
-        require: true
+        required: true
     },
     payway:{
         type: String,
-        require: true
+        required: true
     },
     orderNumber:{
-        type: Number
+        type: String
     },
     delivered:{
         type: Boolean,
@@ -49,7 +49,7 @@ const ordersSchema = new Schema({
     productOrder: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Products',
-        require: true
+        required: true
     }
 },{timestamps:true})
 

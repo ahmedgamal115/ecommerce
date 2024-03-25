@@ -57,7 +57,7 @@ module.exports = gql`
         amount: [Float!]!
         payway: String!
         commentQ: String
-        orderNumber: Float
+        orderNumber: String
         discountCode: PromoCodes
         productOrder: [Product!]!
         delivered: Boolean
@@ -78,7 +78,7 @@ module.exports = gql`
     
         makeOrder( username: String!,email: String!,phone: String!,commentQ: String,otherPhone: String,
             address: String!,size: [String!]!,amount: [Float!]!,
-            payway: String!,orderNumber: Float,discountCode: ID,
+            payway: String!,orderNumber: Upload,discountCode: ID,
             productOrder: [ID!]! ): Orders!
         
         deliverOrder( id: ID! ): String!

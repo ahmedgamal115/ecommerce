@@ -34,6 +34,22 @@ const addnewImage = async(images,color,gender)=>{
     }
     return imagesPath
 }
+const addReceipt = async(image,username)=>{
+    const { createReadStream, filename, encoding, mimetype } = await image
+    const stream = createReadStream();
+    const fileUpload = bucket.file(`Receipt/${username}_${Date.now()}_${path.extname(filename)}`);
+    const uploadStream = fileUpload.createWriteStream({
+        metadata: {
+            contentType: mimetype
+        }
+    });
+    await stream.pipe(uploadStream)
+    let imageUrl = (await fileUpload.getSignedUrl({
+        action: 'read',
+        expires: '01-01-2030' // Adjust the expiration time as needed
+    }))
+    return imageUrl[0]
+}
 
 module.exports = {
     addColors: async(parent, args, {Models})=>{
@@ -139,22 +155,25 @@ module.exports = {
 
     makeOrder: async(parent, args, {Models})=>{
         try {
-            let newOrder = Models.orders({
-                username: args.username,
-                email: args.email,
-                phone: args.phone,
-                otherPhone: args.otherPhone,
-                address: args.address,
-                size: args.size,
-                amount:args.amount,
-                payway: args.payway,
-                commentQ: args.commentQ,
-                orderNumber: args.orderNumber,
-                discountCode: args.discountCode,
-                productOrder: args.productOrder,
+            return addReceipt(args.orderNumber,args.username).then(async(imageData)=>{
+                let newOrder = Models.orders({
+                    username: args.username,
+                    email: args.email,
+                    phone: args.phone,
+                    otherPhone: args.otherPhone,
+                    address: args.address,
+                    size: args.size,
+                    amount:args.amount,
+                    payway: args.payway,
+                    commentQ: args.commentQ,
+                    orderNumber: imageData,
+                    discountCode: args.discountCode,
+                    productOrder: args.productOrder,
+                })
+                await newOrder.save()
+                await Models.products.findOneAndUpdate(args.id,{$inc: { "amounts": `-${args.amount}` }})
+                return newOrder
             })
-            await newOrder.save()
-            return newOrder
 
         } catch (error) {
             console.error('Error When Make Order'+error)
